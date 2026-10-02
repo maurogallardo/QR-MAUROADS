@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generador de QR · Mauro Ads</title>
+    <meta name="description" content="Generá códigos QR con colores y logo propios y descargalos en PNG, JPG, WebP o SVG." />
+    <meta name="theme-color" content="#07070d" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Outfit:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230047FF'/%3E%3Cpath d='M8 8h6v6H8zM18 8h6v6h-6zM8 18h6v6H8zM18 18h2v2h-2zM22 22h2v2h-2zM18 22h2v2h-2zM22 18h2v2h-2z' fill='%23fff'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <main class="app">
+        <section class="card">
+
+            <!-- Título y URL -->
+            <div class="intro">
+                <h1>Generador de QR</h1>
+                <p class="lead">Pegá una dirección, elegí colores y logo, y descargalo en el formato que necesites.</p>
+
+                <label class="sr-only" for="url">URL del código QR</label>
+                <div class="url-pill">
+                    <input id="url" type="text" inputmode="url" autocomplete="off" spellcheck="false"
+                        placeholder="Pegá tu URL acá" value="https://mauroads.com" />
+                    <button id="clearUrl" class="url-clear" type="button" aria-label="Borrar URL">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 6l12 12M18 6L6 18" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Vista previa del QR -->
+            <div class="preview">
+                <div class="qr-stage">
+                    <div class="qr-glow" aria-hidden="true"></div>
+                    <div class="qr-card">
+                        <div id="qr" class="qr-canvas" role="img" aria-label="Vista previa del código QR"></div>
+                    </div>
+                </div>
+                <p id="contrastWarning" class="warning" role="status" hidden>
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 3l10 18H2L12 3z" />
+                        <path d="M12 10v5M12 18v.01" />
+                    </svg>
+                    Puede que algunos celulares no lo lean
+                </p>
+            </div>
+
+            <!-- Paneles plegables -->
+            <div class="panels">
+                <details class="panel" open>
+                    <summary>
+                        <span>Forma y color</span>
+                        <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </summary>
+                    <div class="panel-body">
+
+                        <div class="field">
+                            <div class="field-row">
+                                <span class="field-label" id="dotsLabel">Puntos</span>
+                                <label class="swatch" title="Color de los puntos">
+                                    <input id="dotsColor" type="color" value="#000000" aria-label="Color de los puntos" />
+                                </label>
+                            </div>
+                            <div class="segmented" role="radiogroup" aria-labelledby="dotsLabel">
+                                <label><input type="radio" name="dotsType" value="square" checked /><span>Cuadrado</span></label>
+                                <label><input type="radio" name="dotsType" value="dots" /><span>Puntos</span></label>
+                                <label><input type="radio" name="dotsType" value="rounded" /><span>Redondeado</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="field-row">
+                                <span class="field-label" id="cornerLabel">Esquinas</span>
+                                <label class="swatch" title="Color de las esquinas">
+                                    <input id="cornerColor" type="color" value="#000000" aria-label="Color de las esquinas" />
+                                </label>
+                            </div>
+                            <div class="segmented" role="radiogroup" aria-labelledby="cornerLabel">
+                                <label><input type="radio" name="cornerType" value="square" checked /><span>Cuadrado</span></label>
+                                <label><input type="radio" name="cornerType" value="rounded" /><span>Redondeado</span></label>
+                                <label><input type="radio" name="cornerType" value="dot" /><span>Punto</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="field-row">
+                                <span class="field-label">Fondo</span>
+                                <label class="swatch" title="Color de fondo">
+                                    <input id="bgColor" type="color" value="#ffffff" aria-label="Color de fondo" />
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </details>
+
+                <details class="panel">
+                    <summary>
+                        <span>Logo</span>
+                        <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </summary>
+                    <div class="panel-body">
+
+                        <div class="logo-row">
+                            <div id="logoThumb" class="logo-thumb" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <rect x="3" y="3" width="18" height="18" rx="4" />
+                                    <circle cx="9" cy="9" r="2" />
+                                    <path d="M21 15l-5-5L5 21" />
+                                </svg>
+                            </div>
+                            <div class="logo-info">
+                                <span id="logoName" class="logo-name">Sin logo</span>
+                                <span class="hint">PNG, JPG o SVG</span>
+                            </div>
+                        </div>
+
+                        <div class="logo-actions">
+                            <label class="btn btn-primary btn-sm" for="logoInput">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M12 16V4M7 9l5-5 5 5M4 20h16" />
+                                </svg>
+                                Subir logo
+                            </label>
+                            <input id="logoInput" class="sr-only" type="file"
+                                accept="image/png,image/jpeg,image/svg+xml,.png,.jpg,.jpeg,.svg" />
+                            <button id="removeLogo" class="btn btn-ghost btn-sm" type="button" disabled>Quitar logo</button>
+                        </div>
+
+                        <div class="field">
+                            <div class="field-row">
+                                <label class="field-label" for="logoSize">Tamaño del logo</label>
+                                <output id="logoSizeValue" class="hint" for="logoSize">35%</output>
+                            </div>
+                            <input id="logoSize" class="range" type="range" min="0.15" max="0.5" step="0.01" value="0.35" disabled />
+                        </div>
+
+                    </div>
+                </details>
+            </div>
+
+            <!-- Descargas -->
+            <div class="download">
+                <div class="download-head">
+                    <span class="field-label">Descargar</span>
+                    <label class="size-field">
+                        <span class="sr-only">Tamaño de exportación en píxeles</span>
+                        <input id="exportSize" type="number" min="200" max="4000" step="100" value="1200" />
+                        <span class="unit">px</span>
+                    </label>
+                </div>
+                <div class="download-buttons">
+                    <button class="btn btn-primary" type="button" data-format="png">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
+                        </svg>
+                        PNG
+                    </button>
+                    <button class="btn btn-ghost" type="button" data-format="jpg">JPG</button>
+                    <button class="btn btn-ghost" type="button" data-format="webp">WebP</button>
+                    <button class="btn btn-ghost" type="button" data-format="svg">SVG</button>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script src="lib/qr-code-styling.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
